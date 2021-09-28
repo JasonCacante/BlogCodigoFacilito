@@ -1,13 +1,13 @@
 class ArticlesController < ApplicationController
     before_action :find_article, only: [:show, :edit, :update, :destroy]
-    before_action :authenticate_user!, only[:new, :create, :edit, :update, :destroy]
+    before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
     def new
         @article = Article.new
     end
 
     def create
-        @article = Article.create(title: params[:article][:title], content: params[:article][:content])
-        render json: @article
+        @article = current_user.articles.create(article_params)
+        redirect_to @article
     end
 
     def show
@@ -17,7 +17,7 @@ class ArticlesController < ApplicationController
     end
 
     def update
-        @article.update(title: params[:article][:title], content: params[:article][:content])
+        @article.update(article_params)
         redirect_to @article
     end
 
@@ -34,4 +34,11 @@ class ArticlesController < ApplicationController
         @articles = Article.all
     end
 
+    def from_author
+        @user = User.find(params[:user_id])
+    end
+
+    def article_params
+        params.require(:article).permit(:title, :content)
+    end
 end

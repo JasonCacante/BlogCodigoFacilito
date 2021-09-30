@@ -25,13 +25,13 @@
 	@extend .margin-top;
 	label {
 		@extend .text-uppercase;
-		@extend .text-secondary;
+		@extend .text-primary;
 	}
 	&:first-of-type {
 		margin-top: 0;
 	}
 	input {
-		@extend .form-control;
+		@extend .form-control-sm;
 		@extend .bg-secondary;
 	}
 	input[type="checkbox"] {

@@ -1,12 +1,15 @@
 class ArticlesController < ApplicationController
     before_action :find_article, only: [:show, :edit, :update, :destroy]
     before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+
     def new
         @article = Article.new
+        @categories = Category.all
     end
 
     def create
         @article = current_user.articles.create(article_params)
+        @article.save_categories
         redirect_to @article
     end
 
@@ -14,10 +17,12 @@ class ArticlesController < ApplicationController
     end
 
     def edit
+        @categories = Category.all
     end
 
     def update
         @article.update(article_params)
+        @article.save_categories
         redirect_to @article
     end
 
@@ -39,6 +44,6 @@ class ArticlesController < ApplicationController
     end
 
     def article_params
-        params.require(:article).permit(:title, :content)
+        params.require(:article).permit(:title, :content, :category_elements => [])
     end
 end
